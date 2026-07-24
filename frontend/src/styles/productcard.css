@@ -1,0 +1,250 @@
+.hero-banner {
+  background: radial-gradient(circle at top right, rgba(249, 115, 22, 0.2), transparent 6 );
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  padding: 100px 30px;
+  border-radius: 16px;
+  margin-bottom: 50px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+
+}
+
+.hero-banner h1 {
+  font-size: 48px;
+  margin-bottom: 20px
+}
+
+
+.hero-banner p {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.hero-banner button {
+  background-color: #f97316;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+
+}
+.hero-banner button:hover {
+  background-color: #ea580c;
+}
+
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(249, 115, 22, 0.2), transparent);
+  z-index: -1;
+}
+
+
+.hero-banner::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+  z-index: -1;
+}
+
+.product-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.product-card img {
+  width: 100%;
+  height: 240px;
+  height: auto;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.product-info {
+  padding: 15px;
+  text-align: left;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;  
+  justify-content: space-between;
+  background : linear-gradient(to top, rgba(255, 255, 255, 0.9), transparent);
+  position: relative;
+  z-index: 2;
+
+}
+
+.product-info h3 {
+  font-size: 1.1 rem;
+  margin-bottom: 10px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.price {
+  font-size: 22px;
+  font-weight: 700;
+  color: #f97316;
+  margin-bottom: 15px;
+
+}
+
+.search-bar{
+  width: 100%;
+  max-width: 500px;
+  padding: 15px 20px;
+  margin-bottom: 30px;
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  color:#fafafa;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  outline:none;
+}
+ .product-detail{
+  background: #18181b;
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid #27272a;
+ }
+
+ .detail-image{
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  object-fit: cover;
+ }
+
+.detail-info{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.search-bar{
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  color: #fafafa;
+  font-size: 16px;
+  transition:all 0.3s ease;
+  outline: none;
+}
+
+.search-bar:focus{
+  border-color: #f97316;
+  box-shadow:0 0 0 3px rgba(249, 115, 22, 0.2);
+}
+
+.product_detail{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  background: #18181b;
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid #27272a;
+
+}
+
+.detail-image{
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.detail-info{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.detail-info h2 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.detail-price {
+  font-size: 2 rem;
+  color: #f97316;
+  font-weight: 700;
+  margin-bottom: 25px;
+
+}
+
+.detail-info p{
+  color: antiquewhite;
+  line-height: 1.7;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+@media (max-width:900px) {
+  .product-detail {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Add this to productCard.css */
+.product_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+/* Makes the View Details link look like a solid button */
+.view-details-link {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #f97316; /* The bright orange accent color */
+    color: #ffffff; /* Bright white text so it stands out */
+    text-decoration: none; /* Removes the default link underline */
+    border-radius: 6px; /* Softly rounded corners */
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.view-details-link:hover {
+    background-color: #ea580c; /* Slightly darker orange */
+    transform: translateY(-2px); /* Lifts the button up slightly */
+}

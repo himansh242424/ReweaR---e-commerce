@@ -1,0 +1,107 @@
+.navbar {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    background-color: #333;
+    color: #fff;
+    -webkit-animation-filter:blur(12px) ;
+    border-bottom: 1 px solid rgba(255,255, 255, 0.05);
+    position: sticky;
+    top:0;
+    z-index: 1000;
+    box-shadow: #333;
+
+}
+ 
+/* Fix the logo class name to match JSX */
+.navbar .navbar-logo a {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    letter-spacing: -1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+/* Fix the links class name to match JSX and add Flexbox */
+.navbar .navbar-links {
+    display: flex;
+    gap: 20px;
+    list-style: none; /* Removes the bullet points */
+    align-items: center;
+}
+
+.navbar .navbar-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+    .navbar
+    .navbar-links a:hover {
+        text-decoration: underline;
+    }       
+
+    .navbar
+    .cart-icon {    
+        position: relative;
+        font-size: 24px;
+        cursor: pointer;
+    }   
+
+    .navbar
+    .cart-icon::after {
+        content: attr(data-count);
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background-color: red;
+        color: #fff;
+        border-radius: 50%;
+        padding: 5px 10px;
+        font-size: 12px;
+    }   
+
+    .navbar
+    .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .navbar
+    .user-profile img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    .btn-logout {
+        background: transparent;
+        color: crimson;
+        border: #333;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-weight: 600;
+        font-family: inherit;
+        transition: all 0.3s ease;
+
+    }
+
+    .btn-logout:hover{
+        background: rgba(255,68,68, 0.05);
+        background-color: #ef4444;
+        transform: translateY(-1px);
+    }
+     @media(max-width: 768px) {
+        .navbar {
+            padding: 15px 20px;
+            flex-direction: column;
+            gap: 15px;
+        }
+     }
+     

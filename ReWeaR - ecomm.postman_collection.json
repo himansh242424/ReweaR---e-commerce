@@ -1,0 +1,565 @@
+{
+  "info": {
+    "_postman_id": "8b6c050e-769c-45cf-a2c2-44e1f17ef12b",
+    "name": "ReWeaR - ecomm",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56741624",
+    "_collection_link": "https://go.postman.co/collection/56741624-8b6c050e-769c-45cf-a2c2-44e1f17ef12b?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "auth and product routes",
+      "item": [
+        {
+          "name": "Admin route--delete single product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_JWT_TOKEN"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "type": "text",
+                  "key": "name",
+                  "value": "Updated Product"
+                },
+                {
+                  "type": "text",
+                  "key": "description",
+                  "value": "Updated description"
+                },
+                {
+                  "type": "text",
+                  "key": "price",
+                  "value": "299"
+                },
+                {
+                  "type": "text",
+                  "key": "stock",
+                  "value": "15"
+                },
+                {
+                  "type": "text",
+                  "key": "category",
+                  "value": "Accessories"
+                },
+                {
+                  "type": "file",
+                  "key": "image",
+                  "src": "C:\\path\\to\\your\\image.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/products/PRODUCT_ID",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "products",
+                "PRODUCT_ID"
+              ]
+            },
+            "description": "Generated from cURL: curl --location --request PUT 'http://localhost:5000/api/products/PRODUCT_ID' \\\r\n--header 'Authorization: Bearer YOUR_JWT_TOKEN' \\\r\n--form 'name=Updated Product' \\\r\n--form 'description=Updated description' \\\r\n--form 'price=299' \\\r\n--form 'stock=15' \\\r\n--form 'category=Accessories' \\\r\n--form 'image=@C:\\path\\to\\your\\image.jpg'"
+          },
+          "response": []
+        },
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Himanshu\",\r\n  \"email\": \"tokentestuser@example.com\",\r\n  \"password\": \"Test@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/users/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\":\n\"john@rewear.com\",\n\"password\":\n\"Password123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{endpoint}}/api/users/login",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "New Request",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "ADMIN--GET ALL USERS",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Himanshu\",\r\n  \"email\": \"tokentestuser@example.com\",\r\n  \"password\": \"Test@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/users/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Get one Products",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "ADMIN --Create new product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_JWT_TOKEN"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "type": "text",
+                  "key": "name",
+                  "value": "Test Product"
+                },
+                {
+                  "type": "text",
+                  "key": "description",
+                  "value": "Sample product description"
+                },
+                {
+                  "type": "text",
+                  "key": "price",
+                  "value": "199"
+                },
+                {
+                  "type": "text",
+                  "key": "stock",
+                  "value": "10"
+                },
+                {
+                  "type": "text",
+                  "key": "category",
+                  "value": "Fashion"
+                },
+                {
+                  "type": "file",
+                  "key": "image",
+                  "src": "C:\\path\\to\\your\\image.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/products",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "products"
+              ]
+            },
+            "description": "Generated from cURL: curl --location 'http://localhost:5000/api/products' \\\n--header 'Authorization: Bearer YOUR_JWT_TOKEN' \\\n--form 'name=Test Product' \\\n--form 'description=Sample product description' \\\n--form 'price=199' \\\n--form 'stock=10' \\\n--form 'category=Fashion' \\\n--form 'image=@C:\\path\\to\\your\\image.jpg'"
+          },
+          "response": []
+        },
+        {
+          "name": "Admin route--edit single product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_JWT_TOKEN"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "type": "text",
+                  "key": "name",
+                  "value": "Updated Product"
+                },
+                {
+                  "type": "text",
+                  "key": "description",
+                  "value": "Updated description"
+                },
+                {
+                  "type": "text",
+                  "key": "price",
+                  "value": "299"
+                },
+                {
+                  "type": "text",
+                  "key": "stock",
+                  "value": "15"
+                },
+                {
+                  "type": "text",
+                  "key": "category",
+                  "value": "Accessories"
+                },
+                {
+                  "type": "file",
+                  "key": "image",
+                  "src": "C:\\path\\to\\your\\image.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/products/PRODUCT_ID",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "products",
+                "PRODUCT_ID"
+              ]
+            },
+            "description": "Generated from cURL: curl --location --request PUT 'http://localhost:5000/api/products/PRODUCT_ID' \\\r\n--header 'Authorization: Bearer YOUR_JWT_TOKEN' \\\r\n--form 'name=Updated Product' \\\r\n--form 'description=Updated description' \\\r\n--form 'price=299' \\\r\n--form 'stock=15' \\\r\n--form 'category=Accessories' \\\r\n--form 'image=@C:\\path\\to\\your\\image.jpg'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "orders",
+      "item": [
+        {
+          "name": "place a order",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{supabase_service_role_api_key_0p3c}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "\n { \"Items\": [\n    {\n      \"productId\": \"64f1a2b3c4d5e6f789012346\",\n      \"quantity\": 2\n    }\n  ],\n  \"totalAmount\": 499,\n  \"address\": {\n    \"fullName\": \"Rahul Kant\",\n    \"street\": \"123 Main St\",\n    \"city\": \"Delhi\",\n    \"country\": \"India\",\n    \"postalCode\": \"110001\"\n  },\n  \"paymentID\": \"pay_test_123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/orders",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "Generated from cURL: curl --location 'http://localhost:5000/api/orders' \\\n--header 'Content-Type: application/json' \\\n--header 'Authorization: Bearer YOUR_JWT_TOKEN' \\\n--data '{\n  \"userId\": \"64f1a2b3c4d5e6f789012345\",\n  \"products\": [\n    {\n      \"product\": \"64f1a2b3c4d5e6f789012346\",\n      \"quantity\": 2\n    }\n  ],\n  \"totalAmount\": 499,\n  \"address\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"Delhi\",\n    \"state\": \"Delhi\",\n    \"country\": \"India\",\n    \"zipCode\": \"110001\"\n  },\n  \"paymentID\": \"pay_test_123456\"\n}'"
+          },
+          "response": []
+        },
+        {
+          "name": "Admin all order",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{supabase_service_role_api_key_0p3c}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "\n { \"Items\": [\n    {\n      \"productId\": \"64f1a2b3c4d5e6f789012346\",\n      \"quantity\": 2\n    }\n  ],\n  \"totalAmount\": 499,\n  \"address\": {\n    \"fullName\": \"Rahul Kant\",\n    \"street\": \"123 Main St\",\n    \"city\": \"Delhi\",\n    \"country\": \"India\",\n    \"postalCode\": \"110001\"\n  },\n  \"paymentID\": \"pay_test_123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/orders",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "Generated from cURL: curl --location 'http://localhost:5000/api/orders' \\\n--header 'Content-Type: application/json' \\\n--header 'Authorization: Bearer YOUR_JWT_TOKEN' \\\n--data '{\n  \"userId\": \"64f1a2b3c4d5e6f789012345\",\n  \"products\": [\n    {\n      \"product\": \"64f1a2b3c4d5e6f789012346\",\n      \"quantity\": 2\n    }\n  ],\n  \"totalAmount\": 499,\n  \"address\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"Delhi\",\n    \"state\": \"Delhi\",\n    \"country\": \"India\",\n    \"zipCode\": \"110001\"\n  },\n  \"paymentID\": \"pay_test_123456\"\n}'"
+          },
+          "response": []
+        },
+        {
+          "name": "update status",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{supabase_service_role_api_key_0p3c}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "\n { \"Items\": [\n    {\n      \"productId\": \"64f1a2b3c4d5e6f789012346\",\n      \"quantity\": 2\n    }\n  ],\n  \"totalAmount\": 499,\n  \"address\": {\n    \"fullName\": \"Rahul Kant\",\n    \"street\": \"123 Main St\",\n    \"city\": \"Delhi\",\n    \"country\": \"India\",\n    \"postalCode\": \"110001\"\n  },\n  \"paymentID\": \"pay_test_123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/orders",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "Generated from cURL: curl --location 'http://localhost:5000/api/orders' \\\n--header 'Content-Type: application/json' \\\n--header 'Authorization: Bearer YOUR_JWT_TOKEN' \\\n--data '{\n  \"userId\": \"64f1a2b3c4d5e6f789012345\",\n  \"products\": [\n    {\n      \"product\": \"64f1a2b3c4d5e6f789012346\",\n      \"quantity\": 2\n    }\n  ],\n  \"totalAmount\": 499,\n  \"address\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"Delhi\",\n    \"state\": \"Delhi\",\n    \"country\": \"India\",\n    \"zipCode\": \"110001\"\n  },\n  \"paymentID\": \"pay_test_123456\"\n}'"
+          },
+          "response": []
+        },
+        {
+          "name": "My orders",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{supabase_service_role_api_key_0p3c}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "\n { \"Items\": [\n    {\n      \"productId\": \"64f1a2b3c4d5e6f789012346\",\n      \"quantity\": 2\n    }\n  ],\n  \"totalAmount\": 499,\n  \"address\": {\n    \"fullName\": \"Rahul Kant\",\n    \"street\": \"123 Main St\",\n    \"city\": \"Delhi\",\n    \"country\": \"India\",\n    \"postalCode\": \"110001\"\n  },\n  \"paymentID\": \"pay_test_123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/orders",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "Generated from cURL: curl --location 'http://localhost:5000/api/orders' \\\n--header 'Content-Type: application/json' \\\n--header 'Authorization: Bearer YOUR_JWT_TOKEN' \\\n--data '{\n  \"userId\": \"64f1a2b3c4d5e6f789012345\",\n  \"products\": [\n    {\n      \"product\": \"64f1a2b3c4d5e6f789012346\",\n      \"quantity\": 2\n    }\n  ],\n  \"totalAmount\": 499,\n  \"address\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"Delhi\",\n    \"state\": \"Delhi\",\n    \"country\": \"India\",\n    \"zipCode\": \"110001\"\n  },\n  \"paymentID\": \"pay_test_123456\"\n}'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "analytics",
+      "item": [
+        {
+          "name": "My Orders Copy",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "endpoint",
+      "value": ""
+    },
+    {
+      "key": "supabase_service_role_api_key_0p3c",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0p3c",
+      "secret": true
+    }
+  ]
+}
