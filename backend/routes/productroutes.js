@@ -8,7 +8,7 @@ const { getProducts,
     createProduct,
     updateProduct,
     deleteProduct
-} = require("../controller/productController");
+} = require("../controller/productcontroller");
 
 const multer = require("multer");
 const storage = multer.diskStorage({});
