@@ -19,7 +19,6 @@ app.use(express.json());
 // API Routes (Since server.js is inside backend, these look inside backend/routes/)
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/products", require("./routes/productroutes"));
-app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/orders", require("./routes/orderroutes"));
 app.use("/api/payment", require("./routes/paymentroutes"));
 app.use("/api/analytics", require("./routes/analyticsroutes"));
