@@ -25,7 +25,7 @@ const Register = () => {
     }
 
     try {
-      // Adjust this endpoint to match your Express backend routes
+
       const response = await fetch('/api/users/register', {
         method: 'POST',
         headers: {

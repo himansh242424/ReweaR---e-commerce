@@ -1,183 +1,252 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-// import { clearCart } from '../redux/cartSlice'; // Optional: if you have a clear cart action
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Checkout = () => {
-  const [shippingData, setShippingData] = useState({
-    fullName: '',
-    address: '',
-    city: '',
-    postalCode: '',
-    country: '',
-    paymentMethod: 'Credit Card'
-  });
-  const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    
+    // Fetch cart items from Redux store (adjust based on your actual Redux slice structure)
+    const cart = useSelector((state) => state.cart || { cartItems: [] });
+    const { cartItems } = cart;
 
-  const cartItems = useSelector((state) => state.cart.cartItems || state.cart.items || []);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+    // Form state for shipping address
+    const [address, setAddress] = useState({
+        fullName: '',
+        phone: '',
+        street: '',
+        city: '',
+        state: '',
+        postalCode: '',
+        country: 'India'
+    });
 
-  // Calculate the total price
-  const cartTotal = cartItems.reduce((total, item) => {
-    const itemQuantity = item.quantity || 1;
-    return total + (item.price * itemQuantity);
-  }, 0);
+    const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    setShippingData({ ...shippingData, [e.target.name]: e.target.value });
-  };
+    // Calculate total price
+    const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
+    const shippingFee = subtotal > 500 ? 0 : 50; // Free shipping over ₹500
+    const totalAmount = subtotal + shippingFee;
 
-  const handlePlaceOrder = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+    const handleChange = (e) => {
+        setAddress({ ...address, [e.target.name]: e.target.value });
+    };
 
-    try {
-      // NOTE: This is where you will eventually send the data to your Express backend
-      // const orderData = { orderItems: cartItems, shippingAddress: shippingData, totalPrice: cartTotal };
-      // await fetch('/api/orders', { method: 'POST', body: JSON.stringify(orderData), ... });
-      
-      // Simulating network request
-      setTimeout(() => {
-        alert('Order placed successfully! Thank you for shopping with ReWeaR.');
-        // dispatch(clearCart()); // Clear the cart after successful order
-        navigate('/order-success'); // Redirect to home or an order success page
-      }, 1500);
+    // Load Razorpay Script dynamically
+    const loadRazorpayScript = (src) => {
+        return new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = src;
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    };
 
-    } catch (error) {
-      console.error('Error placing order:', error);
-      alert('Failed to place order. Please try again.');
-      setLoading(false);
-    }
-  };
+    // Handle Payment Checkout
+    const handleRazorpayPayment = async (e) => {
+        e.preventDefault();
 
-  // If user bypasses cart and cart is empty, send them back
-  if (cartItems.length === 0) {
+        if (!address.fullName || !address.phone || !address.street || !address.city) {
+            alert("Please fill in all required shipping details.");
+            return;
+        }
+
+        if (cartItems.length === 0) {
+            alert("Your cart is empty!");
+            return;
+        }
+
+        setLoading(true);
+        const res = await loadRazorpayScript("https://checkout.razorpay.com/v1/checkout.js");
+
+        if (!res) {
+            alert("Razorpay SDK failed to load. Check your internet connection.");
+            setLoading(false);
+            return;
+        }
+
+        try {
+            // 1. Create order on backend
+            const { data: order } = await axios.post("http://localhost:5000/api/payment/create-order", {
+                amount: totalAmount,
+            });
+
+            // 2. Configure Razorpay options
+            const options = {
+                key: "YOUR_RAZORPAY_KEY_ID", // Replace with your key or pull from env
+                amount: order.amount,
+                currency: order.currency,
+                name: "ReWear E-Commerce",
+                description: "Sustainable Fashion Checkout",
+                order_id: order.id,
+                handler: async function (response) {
+                    alert(`Payment Successful! Transaction ID: ${response.razorpay_payment_id}`);
+                    
+                    // Optional: Dispatch action to clear cart or save order to backend database here
+                    navigate('/order-success');
+                },
+                prefill: {
+                    name: address.fullName,
+                    contact: address.phone,
+                },
+                notes: {
+                    address: `${address.street}, ${address.city}, ${address.state} - ${address.postalCode}`
+                },
+                theme: {
+                    color: "#16a34a", // Tailwind green-600
+                },
+            };
+
+            const paymentWindow = new window.Razorpay(options);
+            paymentWindow.open();
+        } catch (error) {
+            console.error("Payment error:", error);
+            alert("Could not initialize payment. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
-      <div className="main-content" style={{ textAlign: 'center', marginTop: '50px' }}>
-        <h2>Your cart is empty</h2>
-        <Link to="/shop" className="btn" style={{ marginTop: '20px' }}>Go to Shop</Link>
-      </div>
+        <div className="max-w-7xl mx-auto px-4 py-8">
+            <h1 className="text-3xl font-bold mb-8 text-gray-800">Checkout & Payment</h1>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                {/* Left Side: Shipping Address Form */}
+                <div className="lg:col-span-2 bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <h2 className="text-xl font-semibold mb-4 text-gray-700">Shipping Address</h2>
+                    
+                    <form onSubmit={handleRazorpayPayment} className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Full Name</label>
+                                <input 
+                                    type="text" 
+                                    name="fullName" 
+                                    value={address.fullName} 
+                                    onChange={handleChange} 
+                                    required 
+                                    className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder="John Doe"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Phone Number</label>
+                                <input 
+                                    type="tel" 
+                                    name="phone" 
+                                    value={address.phone} 
+                                    onChange={handleChange} 
+                                    required 
+                                    className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder="9876543210"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-600 mb-1">Street Address</label>
+                            <input 
+                                type="text" 
+                                name="street" 
+                                value={address.street} 
+                                onChange={handleChange} 
+                                required 
+                                className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                placeholder="House No, Building, Street Name"
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">City</label>
+                                <input 
+                                    type="text" 
+                                    name="city" 
+                                    value={address.city} 
+                                    onChange={handleChange} 
+                                    required 
+                                    className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder="City"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">State</label>
+                                <input 
+                                    type="text" 
+                                    name="state" 
+                                    value={address.state} 
+                                    onChange={handleChange} 
+                                    required 
+                                    className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder="State"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Postal Code</label>
+                                <input 
+                                    type="text" 
+                                    name="postalCode" 
+                                    value={address.postalCode} 
+                                    onChange={handleChange} 
+                                    required 
+                                    className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder="PIN Code"
+                                />
+                            </div>
+                        </div>
+
+                        <button 
+                            type="submit" 
+                            disabled={loading || cartItems.length === 0}
+                            className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition duration-200 disabled:bg-gray-400 shadow-lg"
+                        >
+                            {loading ? "Processing..." : `Pay ₹${totalAmount} via Razorpay`}
+                        </button>
+                    </form>
+                </div>
+
+                {/* Right Side: Order Summary */}
+                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100 h-fit">
+                    <h2 className="text-xl font-semibold mb-4 text-gray-700">Order Summary</h2>
+                    
+                    <div className="divide-y divide-gray-100 max-h-60 overflow-y-auto mb-4">
+                        {cartItems.length === 0 ? (
+                            <p className="text-gray-500 text-sm py-4">Your cart is empty.</p>
+                        ) : (
+                            cartItems.map((item) => (
+                                <div key={item.product || item._id} className="py-3 flex justify-between items-center text-sm">
+                                    <div>
+                                        <p className="font-medium text-gray-800">{item.name}</p>
+                                        <p className="text-gray-500">Qty: {item.qty}</p>
+                                    </div>
+                                    <span className="font-semibold text-gray-700">₹{item.price * item.qty}</span>
+                                </div>
+                            ))
+                        )}
+                    </div>
+
+                    <div className="space-y-2 border-t pt-4 text-sm text-gray-600">
+                        <div className="flex justify-between">
+                            <span>Subtotal</span>
+                            <span>₹{subtotal}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Shipping Fee</span>
+                            <span>{shippingFee === 0 ? "Free" : `₹${shippingFee}`}</span>
+                        </div>
+                        <div className="flex justify-between font-bold text-lg text-gray-900 border-t pt-3">
+                            <span>Total</span>
+                            <span>₹{totalAmount}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     );
-  }
-
-  return (
-    <div className="main-content">
-      <Link to="/cart" style={{ color: '#a1a1aa', marginBottom: '20px', display: 'inline-block' }}>
-        &larr; Back to Cart
-      </Link>
-      
-      <h2 style={{ marginBottom: '30px', borderBottom: '1px solid #27272a', paddingBottom: '15px' }}>Checkout</h2>
-
-      <div style={{ display: 'flex', gap: '40px', flexWrap: 'wrap' }}>
-        
-        {/* LEFT COLUMN: Shipping Form */}
-        <div style={{ flex: '2', minWidth: '300px' }}>
-          <div style={{ background: '#18181b', padding: '30px', borderRadius: '12px', border: '1px solid #27272a' }}>
-            <h3 style={{ marginBottom: '20px', color: '#f97316' }}>Shipping Details</h3>
-            
-            <form onSubmit={handlePlaceOrder} id="checkout-form">
-              <div style={{ marginBottom: '15px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', color: '#a1a1aa', fontSize: '0.9rem' }}>Full Name</label>
-                <input 
-                  type="text" name="fullName" value={shippingData.fullName} onChange={handleChange} required
-                  style={{ width: '100%', padding: '12px', background: '#09090b', border: '1px solid #27272a', color: '#fafafa', borderRadius: '8px', outline: 'none' }}
-                />
-              </div>
-
-              <div style={{ marginBottom: '15px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', color: '#a1a1aa', fontSize: '0.9rem' }}>Address</label>
-                <input 
-                  type="text" name="address" value={shippingData.address} onChange={handleChange} required
-                  style={{ width: '100%', padding: '12px', background: '#09090b', border: '1px solid #27272a', color: '#fafafa', borderRadius: '8px', outline: 'none' }}
-                />
-              </div>
-
-              <div style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
-                <div style={{ flex: '1' }}>
-                  <label style={{ display: 'block', marginBottom: '8px', color: '#a1a1aa', fontSize: '0.9rem' }}>City</label>
-                  <input 
-                    type="text" name="city" value={shippingData.city} onChange={handleChange} required
-                    style={{ width: '100%', padding: '12px', background: '#09090b', border: '1px solid #27272a', color: '#fafafa', borderRadius: '8px', outline: 'none' }}
-                  />
-                </div>
-                <div style={{ flex: '1' }}>
-                  <label style={{ display: 'block', marginBottom: '8px', color: '#a1a1aa', fontSize: '0.9rem' }}>Postal Code</label>
-                  <input 
-                    type="text" name="postalCode" value={shippingData.postalCode} onChange={handleChange} required
-                    style={{ width: '100%', padding: '12px', background: '#09090b', border: '1px solid #27272a', color: '#fafafa', borderRadius: '8px', outline: 'none' }}
-                  />
-                </div>
-              </div>
-
-              <div style={{ marginBottom: '25px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', color: '#a1a1aa', fontSize: '0.9rem' }}>Country</label>
-                <input 
-                  type="text" name="country" value={shippingData.country} onChange={handleChange} required
-                  style={{ width: '100%', padding: '12px', background: '#09090b', border: '1px solid #27272a', color: '#fafafa', borderRadius: '8px', outline: 'none' }}
-                />
-              </div>
-
-              <h3 style={{ marginBottom: '20px', color: '#f97316', borderTop: '1px solid #27272a', paddingTop: '20px' }}>Payment Method</h3>
-              <div style={{ marginBottom: '20px' }}>
-                <select 
-                  name="paymentMethod" value={shippingData.paymentMethod} onChange={handleChange}
-                  style={{ width: '100%', padding: '12px', background: '#09090b', border: '1px solid #27272a', color: '#fafafa', borderRadius: '8px', outline: 'none', cursor: 'pointer' }}
-                >
-                  <option value="Credit Card">Credit Card</option>
-                  <option value="PayPal">PayPal</option>
-                  <option value="Cash on Delivery">Cash on Delivery</option>
-                </select>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        {/* RIGHT COLUMN: Order Summary (Smaller version of the Cart summary) */}
-        <div style={{ flex: '1', minWidth: '250px' }}>
-          <div style={{ background: '#18181b', padding: '25px', borderRadius: '12px', border: '1px solid #27272a', position: 'sticky', top: '20px' }}>
-            <h3 style={{ margin: '0 0 20px 0', borderBottom: '1px solid #27272a', paddingBottom: '15px' }}>Order Summary</h3>
-            
-            <div style={{ maxHeight: '200px', overflowY: 'auto', marginBottom: '20px' }}>
-              {cartItems.map((item) => (
-                <div key={item._id || item.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontSize: '0.9rem', color: '#a1a1aa' }}>
-                  <span>{item.name} (x{item.quantity || 1})</span>
-                  <span>${(item.price * (item.quantity || 1)).toFixed(2)}</span>
-                </div>
-              ))}
-            </div>
-            
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px', color: '#a1a1aa' }}>
-              <span>Subtotal</span>
-              <span>${cartTotal.toFixed(2)}</span>
-            </div>
-            
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px', color: '#a1a1aa' }}>
-              <span>Shipping</span>
-              <span>Free</span>
-            </div>
-            
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px', paddingTop: '15px', borderTop: '1px solid #27272a', fontSize: '1.2rem', fontWeight: 'bold' }}>
-              <span>Total</span>
-              <span style={{ color: '#f97316' }}>${cartTotal.toFixed(2)}</span>
-            </div>
-
-            {/* Using the form attribute to trigger the submit function in the left column */}
-            <button 
-              type="submit" 
-              form="checkout-form" 
-              disabled={loading}
-              className="btn" 
-              style={{ width: '100%', marginTop: '25px', padding: '15px', background: '#f97316', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '1.1rem', cursor: 'pointer', fontWeight: 'bold' }}
-            >
-              {loading ? 'Processing...' : 'Place Order'}
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  );
 };
 
 export default Checkout;
