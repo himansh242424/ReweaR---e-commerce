@@ -24,8 +24,8 @@ const Navbar = () => {
         </Link>
       </div>
       <ul className="navbar-links">
-        <li><Link to="/shop">Shop</Link></li>
-        <li><Link to="/cart">Cart ({cartItems.length})</Link></li>
+  <li><Link to="/shop">Shop</Link></li>
+  <li><Link to="/cart">Cart ({cartItems?.length || 0})</Link></li>
         {user ? (
           <>
             <li><Link to="/profile">Hi, {user.name}</Link></li>
