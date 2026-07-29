@@ -25,7 +25,7 @@ app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/payment", require("./routes/paymentRoutes"));
 app.use("/api/analytics", require("./routes/analyticsRoutes"));
 
-/// Serve frontend in production
+// Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, 'frontend/build')));
 
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'production') {
         res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
     });
 }
-} else {
+ else {
     app.get('/', (req, res) => {
         res.send('ReWear API is running in Development mode...');
     });
